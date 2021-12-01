@@ -13,6 +13,6 @@ Dockerised Perl:
 # Run
 
 ```
-# Bootstraps the module path ./lib
+# Bootstraps the module path ./lib and mounts '.' as /app/data
 ./tools/run.sh aoc-scripts/day-01/01.pl
 ```
