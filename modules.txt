@@ -1,4 +1,8 @@
-Log::Any
+Data::Dumper::Concise
 Function::Parameters
+Furl
+IO::Socket::SSL
+Log::Any
 Moo
+Readonly
 String::Util
