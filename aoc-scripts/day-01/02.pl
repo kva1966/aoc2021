@@ -31,7 +31,7 @@ fun rolling_sum($rolling_count, @arr) {
     return @rollsums;
 }
 
-my @measurements = read_input_file_to_array("1");
+my @measurements = read_input_file_to_array("01-measurements");
 #my @measurements = ( 1, 2, 1, 6, 7, 6, 3, 2, 3, 4, 1, 1, 1, 2 );
 
 my $rolling_count = 3;
