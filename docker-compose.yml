@@ -1,0 +1,7 @@
+version: "3.9"
+
+services:
+  aoc-perl:
+    build: .
+    volumes:
+      - "$PWD:/app/data"
