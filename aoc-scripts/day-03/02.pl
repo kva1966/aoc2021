@@ -4,7 +4,7 @@ use 5.34.0;
 use warnings;
 use Function::Parameters;
 
-use AOC::Util qw( read_input_file_to_array assert );
+use AOC::Util qw( read_input_file_to_array );
 
 my @diagnostics_strs = read_input_file_to_array("03-diagnostics");
 # my @diagnostics_strs = qw(
@@ -33,7 +33,7 @@ fun bits_freq($arr) {
     return $hash;
 }
 
-fun get_freq_bit($bits_freq_hash, $mode = 'max') {
+fun get_freq_bit(:$bits_freq_hash, :$mode = 'max', :$bit_val_if_eq_freq = 0) {
     my $zero_freq = $bits_freq_hash->{0} // 0;
     my $one_freq = $bits_freq_hash->{1} // 0;
     my $eq = $zero_freq == $one_freq;
@@ -42,7 +42,7 @@ fun get_freq_bit($bits_freq_hash, $mode = 'max') {
         ($one_freq >= $zero_freq ? 1 : 0) :
         ($one_freq <= $zero_freq ? 1 : 0);
 
-    return { freq_val => $freq_val, is_equal_freq => $eq };
+    return $eq ? $bit_val_if_eq_freq : $freq_val;
 }
 
 fun filter_nums(:$nums_arr, :$bit_pos, :$bit_val) {
@@ -62,12 +62,17 @@ fun get_bits_at_pos($nums_arr, $pos) {
 fun filter_nums_at_pos(:$nums_arr, :$bit_pos, :$mode = 'max', :$bit_val_if_eq_freq = 0) {
     my @bits_at_pos = get_bits_at_pos($nums_arr, $bit_pos);
 
-    my $bits_freq_result = get_freq_bit(bits_freq(\@bits_at_pos), $mode);
+    my $freq_bit_val = get_freq_bit(
+        bits_freq_hash => bits_freq(\@bits_at_pos),
+        mode => $mode,
+        bit_val_if_eq_freq => $bit_val_if_eq_freq
+    );
 
-    my $bit_val = $bits_freq_result->{is_equal_freq} ? 
-        $bit_val_if_eq_freq : $bits_freq_result->{freq_val};
-
-    return filter_nums(nums_arr => $nums_arr, bit_pos => $bit_pos, bit_val => $bit_val);
+    return filter_nums(
+        nums_arr => $nums_arr,
+        bit_pos => $bit_pos,
+        bit_val => $freq_bit_val
+    );
 }
 
 fun get_rating(:$nums_arr, :$mode = 'max', :$bit_val_if_eq_freq = 0, :$bits = 12) {
