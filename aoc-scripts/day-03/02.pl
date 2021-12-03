@@ -22,20 +22,16 @@ fun bit_at($val, $pos) {
 }
 
 fun bits_freq($arr) {
-    my $hash = {};
+    my $hash = { 0 => 0, 1 => 0 };
     for my $val (@{$arr}) {
-        if (exists $hash->{$val}) {
-            $hash->{$val} += 1 
-        } else {
-            $hash->{$val} = 0;
-        }
+        $hash->{$val} += 1;
     }
     return $hash;
 }
 
 fun get_freq_bit(:$bits_freq_hash, :$mode = 'max', :$bit_val_if_eq_freq = 0) {
-    my $zero_freq = $bits_freq_hash->{0} // 0;
-    my $one_freq = $bits_freq_hash->{1} // 0;
+    my $zero_freq = $bits_freq_hash->{0};
+    my $one_freq = $bits_freq_hash->{1};
     my $eq = $zero_freq == $one_freq;
 
     my $freq_val =  $mode eq 'max' ?
