@@ -9,6 +9,7 @@ use Readonly;
 use Exporter 'import';
 our @EXPORT_OK = qw( 
     read_input_file_to_array
+    assert
 );
 
 Readonly my $INPUT_DIR => "./datafiles/inputs";
@@ -25,5 +26,8 @@ fun read_input_file_to_array($filename) {
     return @lines;
 }
 
+fun assert($cond, $msg) {
+    die $msg unless $cond;
+}
 
 1;
