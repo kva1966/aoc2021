@@ -4,6 +4,7 @@ use 5.34.0;
 use warnings;
 
 use Function::Parameters qw( :strict );
+use List::Util qw( none );
 use Moo;
 
 use AOC::BingoBoard;
@@ -53,6 +54,31 @@ method has_won() {
     }
 }
 
+fun last_won($numbers_to_draw, $bingo_boards) {
+    my %won_boards;
+    my @won_boards;
+    my $last_num_called;
+
+    for my $num (@{$numbers_to_draw}) {
+        for my $idx (0 .. $bingo_boards->count - 1) {
+            next if exists $won_boards{$idx};
+
+            my $board = $bingo_boards->get($idx);
+            $board->mark($num);
+
+            if ($board->has_won()) {
+                $won_boards{$idx} = 1;
+                push @won_boards, $idx;
+                $last_num_called = $num;
+            }
+        }
+    }
+
+    my $last_board_idx = pop @won_boards;
+    my $board = $bingo_boards->get($last_board_idx);
+    return [$last_board_idx, $board, $last_num_called];
+}
+
 method get($idx) {
     return $self->_boards->[$idx];
 }
@@ -60,5 +86,6 @@ method get($idx) {
 method count() {
     return scalar @{$self->_boards};
 }
+
 
 1;

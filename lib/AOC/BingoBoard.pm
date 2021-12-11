@@ -27,6 +27,18 @@ has board_lines => (
     is => 'ro'
 );
 
+###
+# 2D array, of hash refs { num: bool }, e.g. { 33: 0 }. The bool indicates
+# whether the number has been called or not.
+#
+# [
+#  ...
+#  [ [{num: bool} ... [{num: bool}],
+#  [ [{num: bool} ... [{num: bool}],
+#  [ [{num: bool} ... [{num: bool}],
+#  ...
+# ]
+###
 has _board_data => (
     is => 'lazy'
 );
