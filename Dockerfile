@@ -1,5 +1,10 @@
 FROM perl:5.34
 
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install time && \
+    apt-get autoremove && \
+    apt-get clean
+
 WORKDIR /app
 
 COPY cpanfile ./build/

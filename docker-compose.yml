@@ -5,3 +5,9 @@ services:
     build: .
     volumes:
       - "$PWD:/app/data"
+
+  aoc-perl-time:
+    build: .
+    entrypoint: time perl
+    volumes:
+      - "$PWD:/app/data"
