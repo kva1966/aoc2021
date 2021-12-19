@@ -57,11 +57,23 @@ method enumerate_points() {
     my ($x2, $y2) = ($self->x2, $self->y2);
 
     if ($self->is_vertical) {
-        my @range = $y1 <= $y2 ? $y1..$y2 : $y2..$y1;
-        return map { AOC::Point::new_point($x1, $_) } @range;
+        my ($ystart, $yend) = $y1 <= $y2 ? ($y1, $y2) : ($y2, $y1);
+        return _point_iter(
+            xstart => $x1,
+            ystart => $ystart,
+            xinc => 0,
+            yinc => 1,
+            len => $yend - $ystart + 1,
+        );
     } elsif ($self->is_horizontal) { #  y1 == y2
-        my @range = $x1 <= $x2 ? $x1..$x2 : $x2..$x1;
-        return map { AOC::Point::new_point($_, $y1) } @range;
+        my ($xstart, $xend) = $x1 <= $x2 ? ($x1, $x2) : ($x2, $x1);
+        return _point_iter(
+            xstart => $xstart,
+            ystart => $y1,
+            xinc => 1,
+            yinc => 0,
+            len => $xend - $xstart + 1,
+        );
     } else {
         # diagonal
         my $xdist = abs($x1 - $x2);
@@ -71,18 +83,27 @@ method enumerate_points() {
         # init with first point, to include.
         my ($_x, $_y) = ($x1, $y1);
 
-        # Actually takes about twice the time!
-        # my @points = ( 
-        #     AOC::Point::new_point($x1, $y1), 
-        #     map { AOC::Point::new_point($_x += $xinc, $_y += $yinc) } (1..$xdist)
-        # );
+        return _point_iter(
+            xstart => $x1,
+            ystart => $y1,
+            xinc => $xinc,
+            yinc => $yinc,
+            len => $xdist + 1
+        );
+    }
+}
 
-        my @points;
-        push @points,
-            AOC::Point::new_point($x1, $y1), # first point to include
-            map { AOC::Point::new_point($_x += $xinc, $_y += $yinc) } (1..$xdist);
-            
-        return @points;
+fun _point_iter(:$xstart, :$ystart, :$xinc, :$yinc, :$len) {
+    my $i = 0;
+    my ($x, $y) = ($xstart, $ystart);
+
+    return sub {
+        return if $i >= $len;
+        my $point = AOC::Point::new_point($x, $y);
+        $x += $xinc;
+        $y += $yinc;
+        $i++;
+        return $point;
     }
 }
 
