@@ -4,7 +4,6 @@ use 5.34.0;
 use warnings;
 use Function::Parameters;
 use List::Util qw( uniqint );
-use Readonly;
 #use Memoize qw( memoize );
 
 use AOC::Util qw( read_input_file_to_array );
@@ -44,15 +43,11 @@ fun calculate_fuel_cost($dist) {
     return 0 if $dist == 0;
     return $fuel_cost_memo{$dist} if exists $fuel_cost_memo{$dist};
 
-    my $memoise_fn = fun($cost) {
-        $fuel_cost_memo{$dist} = $cost;
-    };
-
     # additional optimisation, if we have a prior distance, we can
     # determine the current distance's cost.
     if (exists $fuel_cost_memo{$dist - 1}) {
         my $new_cost = $fuel_cost_memo{$dist - 1} + $dist;
-        $memoise_fn->($new_cost);
+        memoise($dist, $new_cost);
         return $new_cost;
     }
 
@@ -64,7 +59,11 @@ fun calculate_fuel_cost($dist) {
         $prev_cost++;
     }
 
-    $memoise_fn->($total);
+    memoise($dist, $total);
 
     return $total;
+}
+
+fun memoise($dist, $cost) {
+    $fuel_cost_memo{$dist} = $cost;
 }
