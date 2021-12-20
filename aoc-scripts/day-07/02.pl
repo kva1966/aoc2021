@@ -12,7 +12,7 @@ use AOC::Util qw( read_input_file_to_array );
 #memoize('calculate_fuel_cost');
 
 my @crab_pos_lines = read_input_file_to_array("07-crab-positions");
-my @crab_positions = map { $_ } split(",", $crab_pos_lines[0]);
+my @crab_positions = split(",", $crab_pos_lines[0]);
 #my @crab_positions = (16, 1, 2, 0, 4, 2, 7, 1, 2, 14);
 
 my ($best_position, $fuel_used) = least_fuel_position();
