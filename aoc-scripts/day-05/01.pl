@@ -17,8 +17,8 @@ my %all_points;
 
 for my $line (@lines) {
     next unless ($line->is_vertical || $line->is_horizontal);
-    my @points = $line->enumerate_points();
-    for my $point (@points) {
+    my $point_iter = $line->enumerate_points();
+    while (my $point = $point_iter->()) {
         my $pstr = $point->to_string;
         $all_points{$pstr} = 0 if !exists $all_points{$pstr};
         $all_points{$pstr} += 1;
